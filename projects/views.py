@@ -2,13 +2,16 @@ from django.shortcuts import render,redirect,get_object_or_404
 from .models import Project,Task
 from django.contrib import messages
 from .forms import ProjectForm , TaskForm
+from django.db.models import Sum
 
 # Create your views here.
 def projects(request):
     projects = Project.objects.all()
     tasks = Task.objects.all()
+    projects_h = Project.objects.annotate(total_hours=Sum('tasks__hours'))
     context = {'tasks': tasks,
-               'projects': projects
+               'projects': projects,
+               'projects_h':projects_h
                }
     
     return render(request, 'main.html', context)
@@ -81,3 +84,10 @@ def delete_task(request, project_id, task_id):
         return redirect('projects')
     context = {'project': project, 'task': task}
     return render(request, 'delete_task.html', context)
+
+
+
+# def project_hours(request):
+#     projects = Project.objects.annotate(total_hours=Sum('tasks__hours'))
+
+#     return render(request, 'main.html', {'projects': projects})

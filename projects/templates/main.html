@@ -15,11 +15,12 @@
     {% block content %}
     
         <div>
-            <a href="{% url 'add_project' %}"><button type="button" class="btn btn-primary">Add Project</button></a>
+            
         </div>
 
         <div class="container">
             <h1>All projects</h1>
+            <a href="{% url 'add_project' %}"><button type="button" class="btn btn-primary ">Add Project</button></a>
   <table class="table table-dark">
     <thead>
       <tr>
@@ -77,6 +78,61 @@
 </table>
 
         </div>
+
+
+        <!-- <div class="container">
+          <h1>Reports</h1>
+          <table class="table table-dark">
+            <thead>
+              <tr>
+                <th>Project</th>
+                <th>Total Hours</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for project in projects_h %}
+                {% for task in project.tasks.all %}
+                <tr>
+                  <td>{{ project.name}}</td>
+                  <td>{{ task.name }}</td>               
+                  <td>{{ project.total_hours }}</td>
+                </tr>
+              {% endfor %}
+               {% endfor %}
+            </tbody>
+          </table>
+          
+        </div> -->
+
+        <div  class="container">
+        <h1>Project Task Hours Report</h1>
+        <table class="table table-dark">
+          <thead>
+            <tr>
+              <th>Project Name</th>
+              <th>Task Name</th>
+              <th>Task Hours</th>
+              <th>Project Hours</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for project in projects_h %}
+              {% for task in project.tasks.all %}
+                <tr>
+                  {% if forloop.first %}
+                    <td rowspan="{{ project.tasks.count }}">{{ project.name }}</td>
+                  {% endif %}
+                  <td>{{ task.name }}</td>
+                  <td>{{ task.hours }}</td>
+                  {% if forloop.first %}
+                    <td rowspan="{{ project.tasks.count }}">{{ project.total_hours }}</td>
+                  {% endif %}
+                </tr>
+              {% endfor %}
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
     {% endblock %}
 </body>
 </html>
